@@ -14,6 +14,7 @@ $post = factory(App\Post::calss)->raw(['title' => 'My first post']);
 You can do something like:
 
 ```php
+/** @test */
 public function test_can_create_a_post()
 {
   $attributes = [
@@ -48,3 +49,19 @@ You can do all that in one line as:
 $attributes = request()->validate(['title', 'description']);
 ```
 
+### Group common assertions to create more meaning in your tests
+Take the following test code:
+
+```php
+/** @test */
+public function guests_cannot_control_project()
+{
+  $project = factory(\App\Project::class)->create();
+  
+  $this->get('/projects')->assertRedirect('login');
+  $this->post('/projects', $project->toArray())->assertRedirect('login');
+  $this->get('/projects/' . $project->id)->assertRedirect('login');
+}
+```
+
+This condenses what would have been three tests into just one test. 
