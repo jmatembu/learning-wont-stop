@@ -49,6 +49,19 @@ You can do all that in one line as:
 $attributes = request()->validate(['title', 'description']);
 ```
 
+### Override the validated method in FormRequest object to add data not submitted by user
+
+`$request->validated()` would normally return the data that was validated in the request. However, you may have data that doesn't need to be validated. This could for example be generated values. So in your validated method of your FormRequest object simply merge in your data like so:
+
+```php
+public function validated()
+{
+    return array_merge(parent::validated(), [
+    	// your data here
+    ]);
+}
+```
+
 ### Group common assertions to create more meaning in your tests
 Take the following test code:
 
